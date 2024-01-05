@@ -18,6 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   std_srvs
   tf
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -56,7 +57,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
 add_message_files(
    FILES
-   PosVel.msg
+   pos_vel.msg
  )
 
 ## Generate services in the 'srv' folder
