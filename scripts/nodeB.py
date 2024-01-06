@@ -16,7 +16,7 @@ def give_back_last_goal(msg):
 	last_coord_x = msg.goal.target_pose.pose.position.x
 	last_coord_y = msg.goal.target_pose.pose.position.y
 	
-	print("Last coordinate: ")
+	print("Last coordinates: ")
 	print("x =  ", last_coord_x)
 	print("y =  ", last_coord_y)
 	print("\n")
