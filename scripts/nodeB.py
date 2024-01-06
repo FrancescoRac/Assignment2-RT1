@@ -3,30 +3,44 @@ import rospy
 import actionlib
 import actionlib.msg
 import assignment_2_2023.srv
-from nav_msgs.msg import Odometry
-from std_srvs.srv import SetBool
-from assignment_2_2023.msg import Coordinates
-from actionlib_msgs.msg import GoalStatus
-from geometry_msgs.msg import Point, Pose, Twist
-from assignment_2_2023.msg import PlanningAction, PlanningGoal, PlanningResult
+import assignment_2_2023.msg
+from assignment_2_2023.srv import Coordinates, CoordinatesResponse
 
+last_coord_x = 0.0
+last_coord_y = 0.0
+
+def give_back_last_goal(msg):
+
+	global last_coord_x, last_coord_y
+
+	last_coord_x = msg.goal.target_pose.pose.position.x
+	last_coord_y = msg.goal.target_pose.pose.position.y
+	
+	print("\n\n")
+	print("Last coordinate x =  ", last_coord_x)
+	print("Last coordinate y =  ", last_coord_y)
+	
+	
+def take():
+
+	global last_coord_x, last_coord_y
+	coord = CoordinatesResponse()
+	coord.cx = last_coord_x
+	coord.cy = last_coord_y
+	
+	return coord
+		
 
 def main():
 
 	# Initialize the node
 	rospy.init_node('nodeB')
 	
-	global publisher
+	rospy.Service("srv", Coordinates, take)
 	
-	# Create a publisher
-	publisher = rospy.Publisher("/pos_vel", pos_vel, queue_size=1)
+	rospy.Subscriber("/reaching_goal/goal", assignment_2_2023.msg.PlanningActionGoal, give_back_last_goal)
 	
-	# Subscribe to the /odom topic
-	rospy.Subscriber("/odom", Odometry, callback)
-	
-	# Run the client function
-	client_request()
+	rospy.spin()
 
-# Entry point
 if __name__ == '__main__':
 	main()
