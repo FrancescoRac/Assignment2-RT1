@@ -5,7 +5,7 @@ import actionlib.msg
 import assignment_2_2023.msg
 from nav_msgs.msg import Odometry
 from std_srvs.srv import SetBool
-from assignment_2_2023.msg import pos_vel
+from assignment_2_2023.msg import Pos_Vel
 from actionlib_msgs.msg import GoalStatus
 from geometry_msgs.msg import Point, Pose, Twist
 from assignment_2_2023.msg import PlanningAction, PlanningGoal, PlanningResult
@@ -23,7 +23,7 @@ def callback(msg):
 	vel = msg.twist.twist.linear
 	ang = msg.twist.twist.angular
 	# Create a new Vel message
-	posvel = pos_vel()
+	posvel = Pos_Vel()
 	posvel.x = pos.x
 	posvel.y = pos.y
 	posvel.vel_x = vel.x
@@ -105,7 +105,7 @@ def main():
 	global publisher
 	
 	# Create a publisher
-	publisher = rospy.Publisher("/pos_vel", pos_vel, queue_size=1)
+	publisher = rospy.Publisher("/pos_vel", Pos_Vel, queue_size=1)
 	
 	# Subscribe to the /odom topic
 	rospy.Subscriber("/odom", Odometry, callback)

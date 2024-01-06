@@ -2,10 +2,10 @@
 import rospy
 import actionlib
 import actionlib.msg
-import assignment_2_2023.msg
+import assignment_2_2023.srv
 from nav_msgs.msg import Odometry
 from std_srvs.srv import SetBool
-from assignment_2_2023.msg import pos_vel
+from assignment_2_2023.msg import Coordinates
 from actionlib_msgs.msg import GoalStatus
 from geometry_msgs.msg import Point, Pose, Twist
 from assignment_2_2023.msg import PlanningAction, PlanningGoal, PlanningResult
