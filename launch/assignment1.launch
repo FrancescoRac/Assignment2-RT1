@@ -8,7 +8,7 @@
     
     <node pkg="assignment_2_2023" type="nodeA.py" name="nodeA" launch-prefix="xterm -hold -e" />
     <node pkg="assignment_2_2023" type="nodeB.py" name="nodeB" launch-prefix="xterm -hold -e" />
-    <node pkg="assignment_2_2023" type="nodeC.py" name="nodeC" launch-prefix="xterm -hold -e" />
+    <node pkg="assignment_2_2023" type="nodeC.py" name="nodeC" launch-prefix="xterm -hold -e" output="screen"/>
         
     <node pkg="assignment_2_2023" type="wall_follow_service.py" name="wall_follower" />
     <node pkg="assignment_2_2023" type="go_to_point_service.py" name="go_to_point"  />
