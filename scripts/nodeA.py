@@ -10,24 +10,33 @@ from actionlib_msgs.msg import GoalStatus
 from geometry_msgs.msg import Point, Pose, Twist
 from assignment_2_2023.msg import PlanningAction, PlanningGoal, PlanningResult
 
+'''
+This node allows the user to set a target or cancel it. 
+It also publish the robot's position and velocity as custom message.
+To see the custom message, while the node is running enter "rostopic echo pos_vel" on the prompt.
+'''
+
 
 # Global variables
 publisher= None
-GoalCancelled = True
 
 # Publisher function
 def callback(msg):
 	global publisher
-	# Extract current position and velocity from the message
+	# Extract position, linear velocity and angular velocity from the message
 	pos = msg.pose.pose.position
 	vel = msg.twist.twist.linear
 	ang = msg.twist.twist.angular
-	# Create a new Vel message
+	
+	# Create a new Pos_Vel message
 	posvel = Pos_Vel()
+	
+	# Give the value related to position and velocity to the message
 	posvel.x = pos.x
 	posvel.y = pos.y
 	posvel.vel_x = vel.x
 	posvel.vel_z = ang.z
+	
 	# Publish the message
 	publisher.publish(posvel)
 
@@ -46,15 +55,16 @@ def client_request():
 		# Get the current goal position
 		x_param = rospy.get_param('/des_pos_x')
 		y_param = rospy.get_param('/des_pos_y')
+		
 		# Create a new PlanningGoal
 		target = assignment_2_2023.msg.PlanningGoal()
 		target.target_pose.pose.position.x = x_param
 		target.target_pose.pose.position.y = y_param
 		rospy.loginfo("Current goal: target_x = %f, target_y = %f", x_param, y_param)
 		
-		
+		# If the user wants to set a new goal	
 		print("Set the coordinates of the goal")
-		# If the user wants to set a new goal
+
 		
 		try:
 			x = float(input("Enter the x-coordinate for the new goal: "))
@@ -80,14 +90,15 @@ def client_request():
 		client.send_goal(target)
 		
 			
-		command = input("Insert 'c' if you want to cancel the goal otherwise type 'n' to insert a new goal: ")
+		canc = input("Insert 'c' if you want to cancel the goal otherwise type 'n' to insert a new goal: ")
+		
 		# If the user wants to cancel the current goal
-		if command == 'c':
+		if canc == 'c':
 		
 			client.cancel_goal()
 			rospy.loginfo("Current goal has been cancelled")
-			
-		elif command == 'n':
+		# If the user wants to set a new goal	
+		elif canc == 'n':
 			print("Set a new goal")
 			continue
 				
