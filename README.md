@@ -65,24 +65,38 @@ Then you should follow the following steps:
 
 ## Pseudocode Node A
 
+1. Initialize ROS node 'nodeA'
+2. Create a global variable 'publisher' and set it to None
+3. Define a callback function 'callback' that takes a message 'msg' as input:
+   * Extract position, linear velocity, and angular velocity from 'msg'
+   * Create a 'Pos_Vel' message and populate it with extracted values
+   * Publish the 'Pos_Vel' message using the 'publisher'
 
+4. Define a function 'client_request':
+    * Initialize a SimpleActionClient for the 'PlanningAction' server ('/reaching_goal')
+    * Wait for the action server to become available
+    * Enter a loop that continues until rospy is shutdown:
+        * Get the current goal position parameters from ROS parameters
+        * Create a 'PlanningGoal' message with the target position
+        * Prompt the user to enter new goal coordinates:
+            * Validate the input, ensuring it's within the valid range
+        * Set the new goal coordinates as ROS parameters
+        * Send the new goal to the action server
+        * Enter a loop that continues until the user decides to cancel or set a new goal:
+            * Prompt the user for input ('c' to cancel, 'y' to set a new goal)
+            * If 'c' is entered, cancel the current goal and log the cancellation
+            * If 'y' is entered, set a new goal and break out of the loop
+            * If an invalid input is provided, log a warning and continue the loop
+        * Log the last received goal coordinates
 
+5. Define the 'main' function:
+    * Initialize the ROS node 'nodeA'
+    * Create a global 'publisher' variable and set it to a publisher for the '/pos_vel' topic
+    * Subscribe to the '/odom' topic with the 'callback' function
+    * Call the 'client_request' function
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+6. Check if the script is being run as the main module:
+    * If true, call the 'main' function
 
 
 ## Code Developed
