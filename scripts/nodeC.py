@@ -43,7 +43,7 @@ def take_values(_):
     return Dist_AvgSpeedResponse(distance, avg_speed)		      
 
 # Main function
-if __name__ == "__main__":
+def main():
 
     # Create an instance of the service class
     rospy.init_node('info_service')
@@ -64,3 +64,6 @@ if __name__ == "__main__":
             rospy.loginfo(f"Service response:\n {response}")
             
     rospy.spin()
+    
+if __name__ == "__main__":
+    main()
