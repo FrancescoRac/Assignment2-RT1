@@ -4,6 +4,16 @@ Second project developed for Research Track 1 for Robotics Engineering master de
 
 ## Simulator
 
+### ROS
+
+ROS is an open-source meta-operating system, for robots. It provides services that you would expect from an operating system, including:
+
+* Hardware abstraction;
+* Low-level device control;
+* Imlpementation of commonly-used functionality;
+* Message-passing between processes;
+* Package management.
+
 ### Gazebo
 Gazebo is a 3D simulator for ROS.
 The robot may be controlled using ROS topics. When moving the robot around, information coming from sensor may be visualized in Rviz.
@@ -35,9 +45,11 @@ The following image show the nodes described above and the simulator:
 ![RT2](https://github.com/FrancescoRac/Assignment2-RT1/assets/93876265/91a4da99-aaa3-44b1-8633-901545081ad8)
 
 ## How to run the code
-First of all you should have ROS installed, if you don't have please install ROS using the following command/link:
+First of all you should have ROS installed, if you don't have please install ROS using the following link:
 
-inserire comandi o link per installare ros 
+* Go on https://wiki.ros.org/ROS/Installation and follow the instruction.
+
+Then you should follow the following steps:
 
 * Clone this repository in your machine.
 
@@ -55,7 +67,40 @@ inserire comandi o link per installare ros
 
 
 ## Code Developed
+### Node A
+This node allows to the user to set a target or cancel it.
+The first target is the one which is set in the launch file "assignment1.launch", then the node ask to the user to set a new target and once it is set, the user can choose if enter again a new target or cancel the previous one.
+Once that the target is set it is possible to see the position and the velocity of the robot as a custom message using the command "rostopic echo pos_vel".
 
+It is composed by three functions:
+
+* `main()`: which initialize the node, create the publisher and subscribe to the `/odom` topic.
+
+* `client_request()`: create a simple action client and allows to the user to set the target or cancel it till ROS is shutdown. This function allow to the client to send the goal or cancel it using the function `client.send_goal()` and `client.cancel_goal`.
+
+* `callback(msg)`: which extract the position and velocity from the `/odom` topic, create a new custom message with the value taken from the topic and publish them with the function `publisher.publish("CreatedMessage")`
+
+### Node B: 
+This node allows to the user to see the last target coordinates sent by the user using `Coordinates` service. 
+
+It is composed by three functions:
+
+* `main()`: 
+
+* `take()`:
+
+* `give_back_last_goal(msg)`:
+
+### Node C: 
+This node allow to the user to visualize the average speed of the robot and the distance fo the robot from the last target sent by the user.
+
+It is composed by three functions:
+
+* `main()`:
+
+* `callback()`:
+
+* `take_values()`:
 
 ## Further imporovement
 
