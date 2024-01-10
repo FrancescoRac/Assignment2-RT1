@@ -66,6 +66,25 @@ Then you should follow the following steps:
 ## Pseudocode Node A
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Code Developed
 ### Node A
 This node allows to the user to set a target or cancel it.
@@ -74,33 +93,34 @@ Once that the target is set it is possible to see the position and the velocity 
 
 It is composed by three functions:
 
-* `main()`: which initialize the node, create the publisher and subscribe to the `/odom` topic.
+* `main()`: which initialize the node, create the publisher and subscribe to the `/odom` topic;
 
-* `client_request()`: create a simple action client and allows to the user to set the target or cancel it till ROS is shutdown. This function allow to the client to send the goal or cancel it using the function `client.send_goal()` and `client.cancel_goal`.
+* `client_request()`: create a simple action client and allows to the user to set the target or cancel it till ROS is shutdown. This function allow to the client to send the goal or cancel it using the function `client.send_goal()` and `client.cancel_goal`;
 
-* `callback(msg)`: which extract the position and velocity from the `/odom` topic, create a new custom message with the value taken from the topic and publish them with the function `publisher.publish("CreatedMessage")`
+* `callback(msg)`: which extract the position and velocity from the `/odom` topic, create a new custom message with the value taken from the topic and publish them with the function `publisher.publish("CreatedMessage")`.
 
 ### Node B: 
 This node allows to the user to see the last target coordinates sent by the user using `Coordinates` service. 
+The script subscribes to the `/reaching_goal/goal` topic and listens for messages of type `assignment_2_2023.msg.PlanningActionGoal`
 
 It is composed by three functions:
 
-* `main()`: 
+* `main()`: which initialize the node, initialize the service and subscribe to the `/reaching_goal/goal`;
 
-* `take()`:
+* `take()`: takes the value of the last coordinates and assigns them to `coord`;
 
-* `give_back_last_goal(msg)`:
+* `give_back_last_goal(msg)`: which extracts the last coordinate value on the x and y axes from the message and assigns them to `last_coord_x` and `last_coord_y`, respectively.
 
 ### Node C: 
 This node allow to the user to visualize the average speed of the robot and the distance fo the robot from the last target sent by the user.
 
 It is composed by three functions:
 
-* `main()`:
+* `main()`: initializes the service, subscribes to the /pos_vel topic, and calls the take_values function to return the distance from the goal and the average speed;
 
-* `take_values()`:
+* `take_values()`: returns the distance from the goal and the average speed using the `Dist_AvgSpeedResponse` service;
 
-* `callback(msg)`:
+* `callback(msg)`: which extracts the current position of the robot and the desired position of the robot from the message and calculates the distance between them.
 
 ## Further imporovement
 
