@@ -32,7 +32,7 @@ The aim of the project is to develop three nodes:
 
 The following image show the nodes described above and the simulator:
 
-![RT2](https://github.com/FrancescoRac/Assignment2-RT1/assets/93876265/aa6273f9-22d8-4d2e-9f97-b76e5ec06ffd)
+![RT2](https://github.com/FrancescoRac/Assignment2-RT1/assets/93876265/91a4da99-aaa3-44b1-8633-901545081ad8)
 
 ## How to run the code
 First of all you should have ROS installed, if you don't have please install ROS using the following command/link:
