@@ -63,7 +63,7 @@ Then you should follow the following steps:
 
 * Use the command `roslaunch assignment_2_2023 assignment1.launch`, which is a command to read the launch file, such that it will run each file write in the launch file.
 
-## Flowchart Node A
+## Pseudocode Node A
 
 
 ## Code Developed
@@ -98,9 +98,9 @@ It is composed by three functions:
 
 * `main()`:
 
-* `callback()`:
-
 * `take_values()`:
+
+* `callback(msg)`:
 
 ## Further imporovement
 
