@@ -91,6 +91,7 @@ def client_request():
 		
 		goal_canc = False
 		
+		# while goal_canc is False ask to the user if cancel the goal or set a new goal
 		while goal_canc is False:
 			
 			canc = input("Insert 'c' if you want to cancel the goal otherwise type 'y' to insert a new goal: ")
@@ -102,6 +103,7 @@ def client_request():
 				client.cancel_goal()
 				rospy.loginfo("Current goal has been cancelled")
 				goal_canc = True
+				
 			# If the user wants to set a new goal	
 			elif canc == 'y':
 				print("Set a new goal")
