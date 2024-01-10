@@ -70,7 +70,7 @@ def client_request():
 			x = float(input("Enter the x-coordinate for the new goal: "))
 			y = float(input("Enter the y-coordinate for the new goal: "))
 				
-			if (x > 9.0 or y > 9.0):
+			if (x > 9.0 or y > 9.0 or x < -9.0 or y < -9.0):
 				print("Please enter a valid input \nInput values must be between -8.0 and 8.0")
 				continue
 		except ValueError:
@@ -89,21 +89,28 @@ def client_request():
 		# Send the new goal
 		client.send_goal(target)
 		
+		goal_canc = False
+		
+		while goal_canc is False:
 			
-		canc = input("Insert 'c' if you want to cancel the goal otherwise type 'n' to insert a new goal: ")
-		
-		# If the user wants to cancel the current goal
-		if canc == 'c':
-		
-			client.cancel_goal()
-			rospy.loginfo("Current goal has been cancelled")
-		# If the user wants to set a new goal	
-		elif canc == 'n':
-			print("Set a new goal")
-			continue
-				
-		else:
-			rospy.logwarn("Invalid command. Please enter 'y' to insert a new goal or 'c' to cancel the current goal.")
+			canc = input("Insert 'c' if you want to cancel the goal otherwise type 'y' to insert a new goal: ")
+			
+			
+			# If the user wants to cancel the current goal
+			if canc == 'c':
+			
+				client.cancel_goal()
+				rospy.loginfo("Current goal has been cancelled")
+				goal_canc = True
+			# If the user wants to set a new goal	
+			elif canc == 'y':
+				print("Set a new goal")
+				goal_canc = True
+				continue
+					
+			else:
+				rospy.logwarn("Invalid command. Please enter 'y' to insert a new goal or 'c' to cancel the current goal.")
+				continue
 			
 		rospy.loginfo("Last received goal: target_x = %f, target_y = %f", target.target_pose.pose.position.x, target.target_pose.pose.position.y)
 
