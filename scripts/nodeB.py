@@ -27,7 +27,7 @@ def give_back_last_goal(msg):
 	print("\n")
 	
 	
-def take():
+def take(_):
 
 	global last_coord_x, last_coord_y
 	
