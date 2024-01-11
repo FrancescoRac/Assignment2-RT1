@@ -21,16 +21,6 @@ The robot may be controlled using ROS topics. When moving the robot around, info
 ### Rviz
 Rviz is a tool for ROS Visualization. It's a 3D visualization tool for ROS. It allows the user to see the simulated robot model, log sensor information from the robot's sensors and replay the logged sensor information. By visualizing what the robot is seeing, thinking and doing, the user can debug a robot application from sensor inputs to planned actions.
 
-## Motion of the robot
-
-The robot can move in the environment which is an arena with obstacles (walls), the following scripts allow to the robot to reach the target point sent by the user, avoid obstacles and determine the robot actions based on the "change_state function".
-
-`go_to_point_service`: service which allows the robot to move toward the desired position sent by the user and check if the robot can reach it.
-
-`bug_as`: service that allow the user to determine the the robot's behavior by the state machine, which transitions between `go_to_point_service` and `wall_follow_service` states based on laser scan data and proximity to the goal.
-
-`wall_follow_service`: service which allows to the robot to don't hit the obstacles in the arena and turn in order to follow the walls and avoid them.
-
 
 ## Description of the assignment
 The aim of the project is to develop three nodes:
@@ -43,6 +33,16 @@ The aim of the project is to develop three nodes:
 The following image show the nodes described above and the simulator:
 
 ![RT2](https://github.com/FrancescoRac/Assignment2-RT1/assets/93876265/91a4da99-aaa3-44b1-8633-901545081ad8)
+
+## Motion of the robot
+
+The robot can move in the environment which is an arena with obstacles (walls), the following scripts allow to the robot to reach the target point sent by the user, avoid obstacles and determine the robot actions based on the "change_state function".
+
+`go_to_point_service`: service which allows the robot to move toward the desired position sent by the user and check if the robot can reach it.
+
+`bug_as`: service that allow the user to determine the the robot's behavior by the state machine, which transitions between `go_to_point_service` and `wall_follow_service` states based on laser scan data and proximity to the goal.
+
+`wall_follow_service`: service which allows to the robot to don't hit the obstacles in the arena and turn in order to follow the walls and avoid them.
 
 ## How to run the code
 First of all you should have ROS installed, if you don't have please install ROS using the following link:
