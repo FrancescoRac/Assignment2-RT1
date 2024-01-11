@@ -23,7 +23,7 @@ Rviz is a tool for ROS Visualization. It's a 3D visualization tool for ROS. It a
 
 ## Motion of the robot
 
-The robot can move in the environment which is an arena with obstacles (walls), the following scripts allow to the robot to reach the target point sent by the user, avoid obstacles and determine the robot actions based on the "change_state fucntion".
+The robot can move in the environment which is an arena with obstacles (walls), the following scripts allow to the robot to reach the target point sent by the user, avoid obstacles and determine the robot actions based on the "change_state function".
 
 `go_to_point_service`: service which allows the robot to move toward the desired position sent by the user and check if the robot can reach it.
 
@@ -52,6 +52,9 @@ First of all you should have ROS installed, if you don't have please install ROS
 Then you should follow the following steps:
 
 * Clone this repository in your machine.
+```
+$ git clone https://github.com/FrancescoRac/Assignment2-RT1.git
+```
 
 * Run the `roscore` command to launch the master sevrice.
 
@@ -65,19 +68,19 @@ Then you should follow the following steps:
 
 ## Pseudocode Node A
 
-1. Initialize ROS node 'nodeA'
-2. Create a global variable 'publisher' and set it to None
-3. Define a callback function 'callback' that takes a message 'msg' as input:
-   * Extract position, linear velocity, and angular velocity from 'msg'
-   * Create a 'Pos_Vel' message and populate it with extracted values
-   * Publish the 'Pos_Vel' message using the 'publisher'
+1. Initialize ROS node `nodeA`
+2. Create a global variable `publisher` and set it to None
+3. Define a callback function `callback` that takes a message `msg` as input:
+   * Extract position, linear velocity, and angular velocity from `msg`
+   * Create a `Pos_Vel` message and populate it with extracted values
+   * Publish the `Pos_Vel` message using the `publisher`
 
-4. Define a function 'client_request':
-    * Initialize a SimpleActionClient for the 'PlanningAction' server ('/reaching_goal')
+4. Define a function `client_request`:
+    * Initialize a SimpleActionClient for the `PlanningAction` server (`/reaching_goal`)
     * Wait for the action server to become available
     * Enter a loop that continues until rospy is shutdown:
         * Get the current goal position parameters from ROS parameters
-        * Create a 'PlanningGoal' message with the target position
+        * Create a `PlanningGoal` message with the target position
         * Prompt the user to enter new goal coordinates:
             * Validate the input, ensuring it's within the valid range
         * Set the new goal coordinates as ROS parameters
@@ -89,14 +92,14 @@ Then you should follow the following steps:
             * If an invalid input is provided, log a warning and continue the loop
         * Log the last received goal coordinates
 
-5. Define the 'main' function:
-    * Initialize the ROS node 'nodeA'
-    * Create a global 'publisher' variable and set it to a publisher for the '/pos_vel' topic
-    * Subscribe to the '/odom' topic with the 'callback' function
-    * Call the 'client_request' function
+5. Define the `main` function:
+    * Initialize the ROS node `nodeA`
+    * Create a global `publisher` variable and set it to a publisher for the `/pos_vel` topic
+    * Subscribe to the `/odom` topic with the `callback` function
+    * Call the `client_request` function
 
 6. Check if the script is being run as the main module:
-    * If true, call the 'main' function
+    * If true, call the `main` function
 
 
 ## Code Developed
@@ -124,6 +127,11 @@ It is composed by three functions:
 * `take()`: takes the value of the last coordinates and assigns them to `coord`;
 
 * `give_back_last_goal(msg)`: which extracts the last coordinate value on the x and y axes from the message and assigns them to `last_coord_x` and `last_coord_y`, respectively.
+
+The information are visible in an xterm window but it is also possible to visualize the last coordinates that the user set using the following command in a new terminal:
+```
+rosservice call /srv
+```
 
 ### Node C: 
 This node allow to the user to visualize the average speed of the robot and the distance fo the robot from the last target sent by the user.
