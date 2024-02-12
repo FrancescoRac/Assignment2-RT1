@@ -2,7 +2,8 @@
 
 import rospy
 import math
-from assignment_2_2023.msg import Pos_Vel
+from sensor_msgs.msg import LaserScan
+from assignment_2_2023.msg import Pos_Vel, Obs
 from assignment_2_2023.srv import Dist_AvgSpeed, Dist_AvgSpeedResponse
 
 '''
@@ -40,7 +41,9 @@ def callback(msg):
 
 def take_values(_):
     # return the distance from the goal and the average speed using Dist_AvgSpeedResponse service
-    return Dist_AvgSpeedResponse(distance, avg_speed)		      
+    return Dist_AvgSpeedResponse(distance, avg_speed)		
+    
+    
 
 # Main function
 def main():

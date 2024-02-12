@@ -4,8 +4,9 @@ import actionlib
 import actionlib.msg
 import assignment_2_2023.msg
 from nav_msgs.msg import Odometry
-from std_srvs.srv import SetBool
+from std_srvs.srv import SetBool, Empty
 from assignment_2_2023.msg import Pos_Vel
+from assignment_2_2023.srv import CancelGoal, CancelGoalResponse
 from actionlib_msgs.msg import GoalStatus
 from geometry_msgs.msg import Point, Pose, Twist
 from assignment_2_2023.msg import PlanningAction, PlanningGoal, PlanningResult
@@ -32,8 +33,19 @@ def callback(msg):
 	posvel = Pos_Vel()
 	
 	# Give the value related to position and velocity to the message
+	'''
+	Uncomment the following lines if you want the position of the robot in feet
+	'''
+	#posvel.x = pos.x*3.28
+	#posvel.y = pos.y*3.28
+	
+	'''
+	Position in meters
+	Velocity in m/s
+	'''
 	posvel.x = pos.x
 	posvel.y = pos.y
+	#posvel.z = pos.z	Uncomment this row if you want also the z coordinate and add in the Pos_Vel.msg what is written in the brackets (float64 z)
 	posvel.vel_x = vel.x
 	posvel.vel_z = ang.z
 	
@@ -44,7 +56,7 @@ def callback(msg):
 def client_request():
 	global x
 	global y
-	
+	global client
 	# Create a SimpleActionClient
 	client = actionlib.SimpleActionClient('/reaching_goal', assignment_2_2023.msg.PlanningAction)
 	client.wait_for_server()
@@ -94,7 +106,7 @@ def client_request():
 		# while goal_canc is False ask to the user if cancel the goal or set a new goal
 		while goal_canc is False:
 			
-			canc = input("Insert 'c' if you want to cancel the goal otherwise type 'y' to insert a new goal: ")
+			canc = input("Insert 'c' if you want to cancel the goal otherwise type 'y' to insert a new goal or you can type 'r' to reset the simulation ( do not press r service momentarily out of service) : ")
 			
 			
 			# If the user wants to cancel the current goal
@@ -109,12 +121,29 @@ def client_request():
 				print("Set a new goal")
 				goal_canc = True
 				continue
-					
+			
+			#elif canc == 'r':
+			#	client.cancel_goal()
+			#	rospy.wait_for_service("/gazebo/reset_world")
+			#	reset_world = rospy.ServiceProxy("/gazebo/reset_world", Empty)
+			#	reset_world()
+			#	goal_canc = True
+			
 			else:
 				rospy.logwarn("Invalid command. Please enter 'y' to insert a new goal or 'c' to cancel the current goal.")
 				continue
 			
 		rospy.loginfo("Last received goal: target_x = %f, target_y = %f", target.target_pose.pose.position.x, target.target_pose.pose.position.y)
+		
+
+def cancCallback(_):
+
+	cancel = CancelGoalResponse()
+	
+	client.cancel_goal()
+	
+	return cancel
+	
 
 # Main function
 def main():
@@ -129,6 +158,8 @@ def main():
 	
 	# Subscribe to the /odom topic
 	rospy.Subscriber("/odom", Odometry, callback)
+	
+	rospy.Service("/cancel_goal", CancelGoal, cancCallback) 
 	
 	# Run the client function
 	client_request()
