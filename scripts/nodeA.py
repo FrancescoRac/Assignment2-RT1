@@ -4,12 +4,16 @@ import actionlib
 import actionlib.msg
 import assignment_2_2023.msg
 from nav_msgs.msg import Odometry
-from std_srvs.srv import SetBool, Empty
-from assignment_2_2023.msg import Pos_Vel
+#from std_srvs.srv import SetBool, Empty
+from std_srvs.srv import *
+from assignment_2_2023.msg import Pos_Vel, Pos_Goal
 from assignment_2_2023.srv import CancelGoal, CancelGoalResponse
 from actionlib_msgs.msg import GoalStatus
 from geometry_msgs.msg import Point, Pose, Twist
-from assignment_2_2023.msg import PlanningAction, PlanningGoal, PlanningResult
+from assignment_2_2023.msg import PlanningAction, PlanningGoal, PlanningResult, PlanningFeedback, PlanningActionFeedback
+from sensor_msgs.msg import LaserScan
+from assignment_2_2023.msg import Obs
+from assignment_2_2023.srv import Coordinates, CoordinatesResponse, ObsLeft, ObsLeftResponse
 
 '''
 This node allows the user to set a target or cancel it. 
@@ -101,6 +105,11 @@ def client_request():
 		# Send the new goal
 		client.send_goal(target)
 		
+		rospy.wait_for_service("/srv")
+		last_goal = rospy.ServiceProxy("/srv", Coordinates)
+		goal = last_goal()
+		print(goal)
+		
 		goal_canc = False
 		
 		# while goal_canc is False ask to the user if cancel the goal or set a new goal
@@ -122,36 +131,38 @@ def client_request():
 				goal_canc = True
 				continue
 			
-			#elif canc == 'r':
-			#	client.cancel_goal()
-			#	rospy.wait_for_service("/gazebo/reset_world")
-			#	reset_world = rospy.ServiceProxy("/gazebo/reset_world", Empty)
-			#	reset_world()
-			#	goal_canc = True
-			
 			else:
 				rospy.logwarn("Invalid command. Please enter 'y' to insert a new goal or 'c' to cancel the current goal.")
 				continue
 			
 		rospy.loginfo("Last received goal: target_x = %f, target_y = %f", target.target_pose.pose.position.x, target.target_pose.pose.position.y)
-		
-
-def cancCallback(_):
-
-	cancel = CancelGoalResponse()
 	
-	client.cancel_goal()
+def obsCallback(msg):
 	
-	return cancel
+	obsL = min([
+		min(min(msg.ranges[432:575]), 10), 
+		min(min(msg.ranges[576:713]), 10),
+		])
 	
+def takeObsLeft(obsL):
 
+	return ObsLeftResponse(obsL)
+	
+	
+def reachedCallback(msg):
+
+	position = msg.feedback.stat
+	
+	if position == "Target reached!":
+		print("reached!") 
+	
 # Main function
 def main():
 
 	# Initialize the node
 	rospy.init_node('nodeA')
 	
-	global publisher
+	global publisher, pub
 	
 	# Create a publisher
 	publisher = rospy.Publisher("/pos_vel", Pos_Vel, queue_size=1)
@@ -159,7 +170,11 @@ def main():
 	# Subscribe to the /odom topic
 	rospy.Subscriber("/odom", Odometry, callback)
 	
-	rospy.Service("/cancel_goal", CancelGoal, cancCallback) 
+	rospy.Service("/obsLeft", ObsLeft, takeObsLeft) 
+    
+	rospy.Subscriber("/scan", LaserScan, obsCallback)
+	
+	rospy.Subscriber("/reaching_goal/feedback",PlanningActionFeedback,reachedCallback)
 	
 	# Run the client function
 	client_request()

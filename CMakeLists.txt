@@ -59,6 +59,7 @@ add_message_files(
    FILES
    Pos_Vel.msg
    Obs.msg
+   Pos_Goal.msg
  )
 
 ## Generate services in the 'srv' folder
@@ -67,6 +68,7 @@ add_service_files(
    Coordinates.srv
    Dist_AvgSpeed.srv
    CancelGoal.srv
+   ObsLeft.srv
  )
 
 ## Generate actions in the 'action' folder
