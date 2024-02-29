@@ -1,4 +1,26 @@
 #! /usr/bin/env python
+
+
+"""
+.. module nodeB
+
+   :platform unix
+   :synopsys:Brief description of the file
+	
+.. :moduleauthor:: Francesco Rachiglia ceccorac@gmail.com
+
+ROS node that allows to the user to see the last coordinates sent by the user using the "Coordinates" service. 
+
+Subscrbes to:
+
+	/reaching_goal/goal
+	
+Services:
+
+	/Coordinates
+	
+"""
+
 import rospy
 import actionlib
 import actionlib.msg
@@ -15,6 +37,14 @@ last_coord_y = 0.0
 
 def give_back_last_goal(msg):
 
+	"""
+	give_back_last_goal Function:
+		get the last desired position inserted by the user.
+	
+	Args(/reaching_goal/goal): that contain the coordinates of the last goal.
+	
+	"""
+
 	global last_coord_x, last_coord_y
 
 	# Take the last coordinate value
@@ -28,6 +58,18 @@ def give_back_last_goal(msg):
 	
 	
 def take(_):
+
+	"""
+	take Function:
+		take the response of the service Coordinate which gives the last coordinates of the desired position.
+		
+	Parameters:
+		coord: parameter that has the x and y coordinate of the desired position.
+		
+	Returns:
+		the coordinates (x and y) of the desired position.
+		
+	"""
 
 	global last_coord_x, last_coord_y
 	

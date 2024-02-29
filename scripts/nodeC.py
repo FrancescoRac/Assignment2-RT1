@@ -1,8 +1,31 @@
 #!/usr/bin/env python
 
+
+"""
+.. module nodeC
+
+   :platform unix
+   :synopsys:Brief description of the file
+	
+.. :moduleauthor:: Francesco Rachiglia ceccorac@gmail.com
+
+ROS node that allow to the user to visualize the average speed of the robot 
+and the distance fo the robot from the last target sent by the user.
+
+Subscribes to:
+
+	/Pos_Vel
+	
+Services:
+	
+	Dist_AvgSpeed
+
+"""
+
 import rospy
 import math
-from assignment_2_2023.msg import Pos_Vel
+from sensor_msgs.msg import LaserScan
+from assignment_2_2023.msg import Pos_Vel, Obs
 from assignment_2_2023.srv import Dist_AvgSpeed, Dist_AvgSpeedResponse
 
 '''
@@ -16,6 +39,26 @@ window = []
 
 def callback(msg):
     
+    """
+    callback Function:
+    	to compute the average of the speed of the robot and distance from the desired position.
+    	
+    Args:
+    msg(PosVel): contain the position of the robot.
+    	
+    Parameters:
+    
+    	x: parameter that has the value of the x coordinate of the position of the robot.
+    	
+    	y: parameter that has the value of the y coordinate of the position of the robot.
+    	
+    	window_size: is a size number for an array used to compute the mean of the velocity.
+    	
+    	distance: is the distance of the robot from the desired position.
+    	
+    	avg_speed: is the average speed of the robot.
+    	
+    """
     global distance, avg_speed
 
     # get the value related to the desired position of the robot (target position)
@@ -39,8 +82,18 @@ def callback(msg):
 
 
 def take_values(_):
+
+	"""
+	take_values Function:
+		is used to get the response of the service Dist_AvgSpeed.
+		
+	Returns: 
+		distance from the goal and the average speed.
+	"""
     # return the distance from the goal and the average speed using Dist_AvgSpeedResponse service
-    return Dist_AvgSpeedResponse(distance, avg_speed)		      
+	return Dist_AvgSpeedResponse(distance, avg_speed)		
+    
+    
 
 # Main function
 def main():
