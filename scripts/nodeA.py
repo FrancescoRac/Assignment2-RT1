@@ -1,4 +1,32 @@
 #! /usr/bin/env python
+
+"""
+.. module nodeA
+
+   :platform unix
+   :synopsys:Brief description of the file
+	
+.. :moduleauthor:: Francesco Rachiglia ceccorac@gmail.com
+
+ROS node that allow the user to set a target or cancel it. 
+It also publish the robot's position and velocity as custom message.
+To see the custom message, while the node is running enter "rostopic echo pos_vel" on the prompt.
+	
+Subscribes to:
+	
+	/Odometry/odom
+	/LaserScan/scan
+	/reaching_goal/feedback
+	
+Publishes to:
+
+	Pos_Vel/pos_vel
+	
+Services:
+	/ObsLeft
+	
+	
+"""
 import rospy
 import actionlib
 import actionlib.msg
@@ -27,6 +55,21 @@ publisher= None
 
 # Publisher function
 def callback(msg):
+
+	"""
+	callback Function, take as input the message related to the position and velocity of the robot, and allow to publish the mentioned above quantity using a publisher to pos_vel.
+	
+	Args:
+	msg(Odom): that contain the robot's position and velocity.
+		
+	Parameters:
+		pos: parameter that has the position of the robot.
+		
+		vel: parameter that has the linear velocity of the robot.
+		
+		ang: parameter that has the angular velocity of the robot.
+		
+	"""
 	global publisher
 	# Extract position, linear velocity and angular velocity from the message
 	pos = msg.pose.pose.position
@@ -58,6 +101,27 @@ def callback(msg):
 
 # Client function
 def client_request():
+
+	"""
+	client_request Function:
+	
+		Allow to the user to set the desired coordinates for the robot's position.
+		If the inserted value is larger than 9 or lower than -9 on both the dimension (x and y) the coordinates are not valid and it will be requested to the user to set other coordinates.
+		
+		This function also give the possibility to the user to delete the current desired position given as input.
+		 
+		If you want to continue to insert desired coordinates you have to type 'y' otherwise type 'c' to cancel the goal.
+		
+	Parameters:
+	
+		x: is the parameter for the x coordinates of the desired position of the robot
+		
+		y: is the parameter for the y coordinates of the desired position of the robot
+		
+		goal_canc: boolean parameter that allow to exit from the while statement once that the user choose if insert a new input coordinates or delete the previous desired coordinates set as input.
+		
+	
+	"""
 	global x
 	global y
 	global client
@@ -99,7 +163,7 @@ def client_request():
 		rospy.set_param('/des_pos_y', y)
 			
 		target.target_pose.pose.position.x = x
-			
+		
 		target.target_pose.pose.position.y = y
 			
 		# Send the new goal
