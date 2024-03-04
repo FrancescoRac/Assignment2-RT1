@@ -2,7 +2,7 @@
 
 Second project developed for Research Track 1 for Robotics Engineering master degree at UniGe.
 
-Documentation available on https://francescorac.github.io/Assignment2-RT1/.
+Documentation available on  https://francescorac.github.io/Assignment2-RT1/.
 
 ## Simulator
 
