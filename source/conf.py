@@ -30,6 +30,7 @@ extensions = ['sphinx.ext.autodoc',
 'sphinx.ext.githubpages', 
 "sphinx.ext.napoleon",
 'sphinx.ext.inheritance_diagram',
+'breathe',
 ]
 
 
